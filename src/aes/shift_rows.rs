@@ -1,10 +1,8 @@
 use crate::aes::block::Block;
 
 fn shift_rows(block: &mut Block) {
-    let mut offset = 0;
-
-    for row in block {
-        let row_0 = row[(0 + offset) % 4];
+    for (offset, row) in block.iter_mut().enumerate() {
+        let row_0 = row[(offset) % 4];
         let row_1 = row[(1 + offset) % 4];
         let row_2 = row[(2 + offset) % 4];
         let row_3 = row[(3 + offset) % 4];
@@ -12,7 +10,6 @@ fn shift_rows(block: &mut Block) {
         row[1] = row_1;
         row[2] = row_2;
         row[3] = row_3;
-        offset += 1;
     }
 }
 
