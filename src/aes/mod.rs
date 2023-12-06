@@ -1,3 +1,4 @@
+pub mod add_round_key;
 pub mod block;
 pub mod mix_columns;
 pub mod shift_rows;
