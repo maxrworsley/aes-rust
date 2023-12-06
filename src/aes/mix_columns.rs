@@ -1,7 +1,7 @@
-use crate::aes::block::Block;
+use crate::aes::block::{Block, make_empty_block};
 
 pub fn mix_columns(block: &mut Block) {
-    let mut temp_block: Block = vec![vec![0; 4]; 4];
+    let mut temp_block = make_empty_block();
 
     for j in 0..=3 {
         temp_block[0][j] = field_multiply_2(block[0][j])
