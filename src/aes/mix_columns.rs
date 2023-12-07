@@ -1,4 +1,4 @@
-use crate::aes::block::{Block, make_empty_block};
+use crate::aes::block::{make_empty_block, Block};
 
 pub fn mix_columns(block: &mut Block) {
     let mut temp_block = make_empty_block();

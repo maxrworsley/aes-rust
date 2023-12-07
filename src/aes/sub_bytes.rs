@@ -32,7 +32,7 @@ mod tests {
     }
 }
 
-fn get_substitute_byte(byte: &u8) -> u8 {
+pub fn get_substitute_byte(byte: &u8) -> u8 {
     match byte {
         0x00 => 0x63,
         0x10 => 0xca,
