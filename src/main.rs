@@ -1,19 +1,12 @@
 mod aes;
-use aes::{
-    key_schedule,
-    add_round_key,
-    shift_rows,
-    mix_columns,
-    sub_bytes,
-    block
-};
+use aes::{add_round_key, block, key_schedule, mix_columns, shift_rows, sub_bytes};
 
 pub fn encrypt(data: &mut block::Block, key: &block::Block) {
-    let keys = key_schedule::generate_key_schedule(&key);
+    let keys = key_schedule::generate_key_schedule(key);
     let mut key_iter = keys.iter();
-    
+
     if let Some(key_block) = key_iter.next() {
-        add_round_key::add_round_key(data, &key_block);
+        add_round_key::add_round_key(data, key_block);
     }
 
     for _ in 0..9 {
@@ -21,14 +14,14 @@ pub fn encrypt(data: &mut block::Block, key: &block::Block) {
         shift_rows::shift_rows(data);
         mix_columns::mix_columns(data);
         if let Some(key_block) = key_iter.next() {
-            add_round_key::add_round_key(data, &key_block);
+            add_round_key::add_round_key(data, key_block);
         }
         print_as_block(data);
     }
     sub_bytes::sub_bytes(data);
     shift_rows::shift_rows(data);
     if let Some(key) = key_iter.next() {
-        add_round_key::add_round_key(data, &key);
+        add_round_key::add_round_key(data, key);
     }
 }
 
@@ -51,11 +44,11 @@ pub fn main() {
     ];
 
     let key = vec![
-            vec![0x2b, 0x28, 0xab, 0x09],
-            vec![0x7e, 0xae, 0xf7, 0xcf],
-            vec![0x15, 0xd2, 0x15, 0x4f],
-            vec![0x16, 0xa6, 0x88, 0x3c],
-        ];
+        vec![0x2b, 0x28, 0xab, 0x09],
+        vec![0x7e, 0xae, 0xf7, 0xcf],
+        vec![0x15, 0xd2, 0x15, 0x4f],
+        vec![0x16, 0xa6, 0x88, 0x3c],
+    ];
 
     encrypt(&mut data, &key);
     print_as_block(&data)
