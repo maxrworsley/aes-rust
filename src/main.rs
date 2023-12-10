@@ -15,18 +15,15 @@ pub fn encrypt(data: &mut block::Block, key: &block::Block) {
     if let Some(key_block) = key_iter.next() {
         add_round_key::add_round_key(data, &key_block);
     }
-    print_as_block(&data);
 
-    for _ in 0..1 {
+    for _ in 0..9 {
         sub_bytes::sub_bytes(data);
-        print_as_block(&data);
         shift_rows::shift_rows(data);
-        print_as_block(&data);
         mix_columns::mix_columns(data);
         if let Some(key_block) = key_iter.next() {
             add_round_key::add_round_key(data, &key_block);
         }
-        print_as_block(&data)
+        print_as_block(data);
     }
     sub_bytes::sub_bytes(data);
     shift_rows::shift_rows(data);
