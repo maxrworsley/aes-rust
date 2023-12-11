@@ -1,31 +1,6 @@
 mod aes;
-use aes::{add_round_key, block, key_schedule, mix_columns, shift_rows, sub_bytes};
 
-pub fn encrypt(data: &mut block::Block, key: &block::Block) {
-    let keys = key_schedule::generate_key_schedule(key);
-    let mut key_iter = keys.iter();
-
-    if let Some(key_block) = key_iter.next() {
-        add_round_key::add_round_key(data, key_block);
-    }
-
-    for _ in 0..9 {
-        sub_bytes::sub_bytes(data);
-        shift_rows::shift_rows(data);
-        mix_columns::mix_columns(data);
-        if let Some(key_block) = key_iter.next() {
-            add_round_key::add_round_key(data, key_block);
-        }
-        print_as_block(data);
-    }
-    sub_bytes::sub_bytes(data);
-    shift_rows::shift_rows(data);
-    if let Some(key) = key_iter.next() {
-        add_round_key::add_round_key(data, key);
-    }
-}
-
-fn print_as_block(data: &block::Block) {
+fn print_as_block(data: &aes::block::Block) {
     for row in data {
         for element in row {
             print!("{:x} ", element)
@@ -50,6 +25,6 @@ pub fn main() {
         vec![0x16, 0xa6, 0x88, 0x3c],
     ];
 
-    encrypt(&mut data, &key);
+    aes::encrypt::encrypt(&mut data, &key);
     print_as_block(&data)
 }
